@@ -58,3 +58,15 @@ class ORMController:
                     logger.info(f"Table '{table.name}' already exists")
 
             logger.info("Tables checked and created if necessary")
+
+    # Проверка, зарегистрирован ли пользователь (через ORM)
+    @session_manager
+    async def is_user_registered(self, session, tg_id: int):
+        user = await session.get(User, tg_id)  # Получаем пользователя по его id через ORM
+        return user is not None  # Возвращаем True, если пользователь найден
+
+    # Добавление нового пользователя (ORM)
+    @session_manager
+    async def add_user(self, session, tg_id: int, username: str, team_name: str):
+        user = User(id=tg_id, username=username, team_name=team_name)  # Создаем объект пользователя
+        session.add(user)  # Добавляем его в сессию
