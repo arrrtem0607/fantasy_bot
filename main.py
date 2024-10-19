@@ -8,7 +8,7 @@ from aiogram.fsm.storage.redis import RedisStorage, DefaultKeyBuilder, Redis
 from aiogram_dialog import setup_dialogs
 
 from configurations import get_config
-# from db.controller.ORM import ORMController
+from db.controller.ORM import ORMController  # Импорт ORMController
 # from bot import get_all_routers  # Добавьте реализацию всех маршрутизаторов бота
 # from bot.middlewares.db_middleware import initialize_database  # Импортируем функцию для инициализации базы данных
 
@@ -21,7 +21,13 @@ logging.basicConfig(level=logging.INFO,
                            "(%(filename)s).%(funcName)s(%(lineno)d) - %(message)s",
                     filename=log_file_path)
 
-# orm_controller = ORMController()
+# ORMController для работы с БД
+orm_controller = ORMController()
+
+
+async def initialize_database():
+    # Инициализация базы данных
+    await orm_controller.create_tables()
 
 
 async def run_bot():
@@ -44,7 +50,7 @@ async def run_bot():
     setup_dialogs(dp)
 
     # Инициализация базы данных
-    # await initialize_database()  # Инициализация БД
+    await initialize_database()  # Инициализация БД
 
     try:
         await dp.start_polling(bot)
