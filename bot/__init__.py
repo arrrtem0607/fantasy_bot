@@ -4,6 +4,7 @@ from aiogram_dialog import setup_dialogs
 from bot.middlewares.db_middleware import DbSessionMiddleware
 from bot.handlers.handlers import router as start_router
 from bot.dialogs.user_registration import register_dialog
+from bot.dialogs.select_team import team_selection_dialog
 from bot.dialogs.main_menu import main_menu_dialog  # Импорт диалога главного меню
 from db.entities.core import Database
 
@@ -19,8 +20,11 @@ async def get_all_routers() -> Router:
     register_dialog.message.middleware(db_session_middleware)
     register_dialog.callback_query.middleware(db_session_middleware)
 
-    main_menu_dialog.message.middleware(db_session_middleware)  # Добавляем миддлварь для главного меню
+    main_menu_dialog.message.middleware(db_session_middleware)
     main_menu_dialog.callback_query.middleware(db_session_middleware)
+
+    team_selection_dialog.message.middleware(db_session_middleware)  # Добавляем миддлварь для выбора команды
+    team_selection_dialog.callback_query.middleware(db_session_middleware)
 
     # Создаем основной маршрутизатор
     router = Router()
@@ -28,7 +32,8 @@ async def get_all_routers() -> Router:
     # Включаем хендлеры и диалоги в маршрутизатор
     router.include_router(start_router)
     router.include_router(register_dialog)
-    router.include_router(main_menu_dialog)  # Подключаем главный диалог
+    router.include_router(main_menu_dialog)
+    router.include_router(team_selection_dialog)  # Подключаем диалог выбора команды
 
     # Настройка диалогов
     setup_dialogs(router)

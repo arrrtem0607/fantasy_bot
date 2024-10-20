@@ -8,3 +8,12 @@ class RegistrationForm(StatesGroup):
 # Состояния для основного меню
 class MainMenuSG(StatesGroup):
     MAIN_PANEL = State()  # Главное меню пользователя
+    VIEW_TEAM = State()
+    NO_TEAM = State()
+
+class TeamSelectionSG(StatesGroup):
+    INSTRUCTION = State()
+    GOALKEEPER = State()
+    FIELD_PLAYERS = State()
+    CONFIRMATION = State()
+    CAPTAIN_SELECTION = State()
