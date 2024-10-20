@@ -8,9 +8,9 @@ from aiogram.fsm.storage.redis import RedisStorage, DefaultKeyBuilder, Redis
 from aiogram_dialog import setup_dialogs
 
 from configurations import get_config
-from db.controller.ORM import ORMController  # Импорт ORMController
-# from bot import get_all_routers  # Добавьте реализацию всех маршрутизаторов бота
-# from bot.middlewares.db_middleware import initialize_database  # Импортируем функцию для инициализации базы данных
+from db.controller.ORM import ORMController  # ORMController для работы с БД
+from bot import get_all_routers  # Функция для подключения всех маршрутов
+from bot.middlewares.db_middleware import DbSessionMiddleware, initialize_database # Импорт middleware для работы с сессией БД
 
 # Логирование
 current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -24,14 +24,8 @@ logging.basicConfig(level=logging.INFO,
 # ORMController для работы с БД
 orm_controller = ORMController()
 
-
-async def initialize_database():
-    # Инициализация базы данных
-    await orm_controller.create_tables()
-
-
 async def run_bot():
-    config = get_config()  # Чтение конфигурации из файла
+    config = get_config()
 
     # Инициализируем Redis и хранилище для FSM
     redis = Redis(host='localhost')  # Настроить Redis при необходимости
@@ -43,20 +37,19 @@ async def run_bot():
     bot = Bot(token=config.bot_config.get_token(), default=default)
     dp = Dispatcher(storage=storage)
 
-    # Включение маршрутизаторов
-    # dp.include_router(await get_all_routers())
+    # Подключаем маршрутизаторы
+    dp.include_router(await get_all_routers())
 
     # Настройка диалогов
     setup_dialogs(dp)
 
     # Инициализация базы данных
-    await initialize_database()  # Инициализация БД
+    await initialize_database()
 
     try:
         await dp.start_polling(bot)
     finally:
         await bot.session.close()
-
 
 if __name__ == "__main__":
     asyncio.run(run_bot())
