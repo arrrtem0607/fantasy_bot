@@ -11,16 +11,18 @@ orm_controller = ORMController()
 router = Router()
 
 @router.message(CommandStart())
-async def start_handler(message: Message, dialog_manager: DialogManager):
+async def start_handler(
+        message: Message,
+        dialog_manager: DialogManager):
     async with dialog_manager.middleware_data['session'] as session:
         is_registered = await orm_controller.is_user_registered(session, message.from_user.id)
 
         if is_registered:
-            await message.answer(LEXICON_RU['welcome_back'])
+            # await message.answer(LEXICON_RU['welcome_back'])
             await dialog_manager.start(MainMenuSG.MAIN_PANEL, mode=StartMode.RESET_STACK)
         else:
-            await message.answer(LEXICON_RU['welcome_new'])
-            await dialog_manager.start(RegistrationForm.username, mode=StartMode.RESET_STACK)
+            # await message.answer(LEXICON_RU['welcome_new'])
+            await dialog_manager.start(RegistrationForm.welcome, mode=StartMode.RESET_STACK)
 
 # Хендлер для команды /cancel
 @router.message(Command(commands=["clear"]))

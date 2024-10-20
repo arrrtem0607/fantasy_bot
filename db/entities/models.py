@@ -23,7 +23,6 @@ class User(Base):
         Index('ix_user_username', 'username'),  # Индекс для ускорения поиска пользователей по имени
     )
 
-
 # Сущность Player (Игрок)
 class Player(Base):
     __tablename__ = 'players'
@@ -44,7 +43,6 @@ class Player(Base):
         Index('ix_player_position', 'position'),  # Индекс для ускорения поиска по позиции
     )
 
-
 # Сущность FantasyTeam (Команда пользователя)
 class FantasyTeam(Base):
     __tablename__ = 'fantasy_teams'
@@ -57,7 +55,6 @@ class FantasyTeam(Base):
     user: Mapped["User"] = relationship("User", back_populates="fantasy_teams")
     player: Mapped["Player"] = relationship("Player", back_populates="fantasy_teams")
 
-
 # Сущность Transfer (Трансфер)
 class Transfer(Base):
     __tablename__ = 'transfers'
@@ -69,7 +66,6 @@ class Transfer(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     user: Mapped["User"] = relationship("User", back_populates="transfers")
-
 
 # Сущность Match (Матч)
 class Match(Base):
@@ -85,7 +81,6 @@ class Match(Base):
     __table_args__ = (
         Index('ix_match_date', 'date'),  # Индекс для ускорения поиска матчей по дате
     )
-
 
 # Сущность PlayerStats (Статистика игрока)
 class PlayerStats(Base):
@@ -106,7 +101,6 @@ class PlayerStats(Base):
 
     player: Mapped["Player"] = relationship("Player", back_populates="stats")
     match: Mapped["Match"] = relationship("Match")
-
 
 # Сущность FantasyPoints (Очки игрока)
 class FantasyPoints(Base):

@@ -41,7 +41,6 @@ async def get_goalkeepers(
     logger.info(f"Список вратарей для Select: {goalkeepers_list}")
     return {"goalkeepers": goalkeepers_list}
 
-
 # Обработчик выбора вратаря
 async def on_goalkeeper_selected(
         callback: CallbackQuery,
@@ -52,7 +51,6 @@ async def on_goalkeeper_selected(
     logger.info(f"Выбран вратарь с ID: {item_id}")
 
     await callback.answer(LEXICON_RU['goalkeeper_selected'])
-
 
 # Обработчик изменения состояния выбора игроков
 async def on_players_state_changed(
@@ -71,7 +69,6 @@ async def on_players_state_changed(
     logger.info(f"Обновленный список выбранных игроков: {selected_players}")
 
     await event.answer()  # Ответ пользователю для подтверждения
-
 
 # Геттер данных для списка полевых игроков по командам
 async def get_players_by_team(
@@ -136,7 +133,6 @@ async def get_players_by_team(
         "remaining_players": remaining_players
     }
 
-
 # Обработчик для переключения на следующую команду
 async def set_next_team(
         dialog_manager: DialogManager):
@@ -146,7 +142,6 @@ async def set_next_team(
         dialog_manager.dialog_data['current_team_idx'] = current_team_idx + 1
     await dialog_manager.switch_to(TeamSelectionSG.FIELD_PLAYERS)
 
-
 # Обработчик для переключения на предыдущую команду
 async def set_prev_team(
         dialog_manager: DialogManager):
@@ -154,7 +149,6 @@ async def set_prev_team(
     if current_team_idx > 0:
         dialog_manager.dialog_data['current_team_idx'] = current_team_idx - 1
     await dialog_manager.switch_to(TeamSelectionSG.FIELD_PLAYERS)
-
 
 # Обработчик для сохранения команды после выбора капитана
 async def process_confirm_team(
@@ -192,7 +186,6 @@ async def process_confirm_team(
 
     await dialog_manager.switch_to(TeamSelectionSG.CONFIRMATION)
 
-
 # Геттер данных для выбора капитана
 async def get_captains(
         dialog_manager: DialogManager,
@@ -220,7 +213,6 @@ async def get_captains(
 
     logger.info(f"Список игроков для выбора капитана: {players_list}")
     return {"players": players_list}
-
 
 # Обработчик выбора капитана
 async def on_captain_selected(

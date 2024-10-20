@@ -77,6 +77,7 @@ class ORMController:
         session.add(user)
 
         # Обновление имени пользователя
+
     @session_manager
     async def update_username(self, session, user_id: int, new_username: str):
         await session.execute(
